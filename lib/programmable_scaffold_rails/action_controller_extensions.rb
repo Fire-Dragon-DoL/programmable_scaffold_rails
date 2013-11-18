@@ -2,6 +2,7 @@ require 'active_support'
 require 'active_support/core_ext'
 
 require 'programmable_scaffold_rails/config'
+require 'programmable_scaffold_rails/controller_helpers'
 require 'programmable_scaffold_rails/scaffold/new'
 require 'programmable_scaffold_rails/scaffold/create'
 require 'programmable_scaffold_rails/scaffold/index'
@@ -18,6 +19,10 @@ module ProgrammableScaffoldRails
 
     module ClassMethods
 
+      # This is the core method which generate the scaffold things.
+      # It's important to notice that it uses a constant because it behaves like
+      # a class, can be inherited, overridden in child classes but it's "frozen"
+      # for the class where it's defined.
       def programmable_scaffold(options={})
         options = ::ProgrammableScaffoldRails::BASE_OPTIONS.merge(options)
         crud    = ::ProgrammableScaffoldRails::CRUD_METHODS
@@ -27,10 +32,9 @@ module ProgrammableScaffoldRails
           raise ":only and :except option must not be used toghether"
         end
 
+        # Process
         crud = options[:only]          if options.include?(:only)
         crud = crud - options[:except] if options.include?(:except)
-
-        # Process
 
         send(:include, ProgrammableScaffoldRails::Scaffold::New)     if crud.include?(:new)
         send(:include, ProgrammableScaffoldRails::Scaffold::Create)  if crud.include?(:create)
@@ -42,6 +46,20 @@ module ProgrammableScaffoldRails
 
         # Store
         const_set(:PROGRAMMABLE_SCAFFOLD, options.freeze)
+
+        self
+      end
+
+      def programmable_scaffold_options
+        const_get(:PROGRAMMABLE_SCAFFOLD)
+      end
+
+    end
+
+    module InstanceMethods
+
+      def programmable_scaffold_controller_helpers
+        @programmable_scaffold_controller_helpers ||= ::ProgrammableScaffoldRails::ControllerHelpers.new(self)
       end
 
     end

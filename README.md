@@ -21,6 +21,9 @@ Or install it yourself as:
 ## Usage
 
 TODO: Write usage instructions here
+In your Controller (or in ApplicationController) include the module:
+
+    include ProgrammableScaffoldRails::ActionControllerExtensions
 
 ## Contributing
 

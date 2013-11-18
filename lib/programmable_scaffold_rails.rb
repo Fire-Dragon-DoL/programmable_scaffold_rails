@@ -1,4 +1,3 @@
-require 'programmable_scaffold_rails/without_patches'
-
-# XXX: Monkey patch, rework may be needed
-require 'programmable_scaffold_rails/patches'
+require 'programmable_scaffold_rails/version'
+require 'programmable_scaffold_rails/config'
+require 'programmable_scaffold_rails/action_controller_extensions'
