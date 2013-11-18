@@ -1,0 +1,1 @@
+require 'programmable_scaffold_rails/patches/action_controller/base'

@@ -1,12 +1,14 @@
 # ProgrammableScaffoldRails
 
-TODO: Write a gem description
+This gem should remove repeated code when rails scaffolding, expecially on controllers.  
+It's useful when you are prototyping and when you are just building an application with a lot of simple **CRUD**.  
+It's also configurable, to avoid as most as possible to completely override one of the default controllers method, unless you are doing something really special.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'programmable_scaffold_rails'
+    gem 'programmable_scaffold_rails', '~> 0.0.1'
 
 And then execute:
 

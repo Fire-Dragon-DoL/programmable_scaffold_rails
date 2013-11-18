@@ -1,5 +1,4 @@
-require "programmable_scaffold_rails/version"
+require 'programmable_scaffold_rails/without_patches'
 
-module ProgrammableScaffoldRails
-  # Your code goes here...
-end
+# XXX: Monkey patch, rework may be needed
+require 'programmable_scaffold_rails/patches'
