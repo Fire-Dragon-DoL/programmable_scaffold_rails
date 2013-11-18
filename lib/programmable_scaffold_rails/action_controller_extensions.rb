@@ -1,8 +1,9 @@
-require 'active_support'
-require 'active_support/core_ext'
+require 'ostruct'
+# require 'active_support'
+# require 'active_support/core_ext'
 
 require 'programmable_scaffold_rails/config'
-require 'programmable_scaffold_rails/controller_helpers'
+require 'programmable_scaffold_rails/action_controller_helpers'
 require 'programmable_scaffold_rails/scaffold/new'
 require 'programmable_scaffold_rails/scaffold/create'
 require 'programmable_scaffold_rails/scaffold/index'
@@ -45,7 +46,7 @@ module ProgrammableScaffoldRails
         send(:include, ProgrammableScaffoldRails::Scaffold::Destroy) if crud.include?(:destroy)
 
         # Store
-        const_set(:PROGRAMMABLE_SCAFFOLD, options.freeze)
+        const_set(:PROGRAMMABLE_SCAFFOLD, OpenStruct.new(options).freeze)
 
         self
       end
@@ -59,7 +60,7 @@ module ProgrammableScaffoldRails
     module InstanceMethods
 
       def programmable_scaffold_controller_helpers
-        @programmable_scaffold_controller_helpers ||= ::ProgrammableScaffoldRails::ControllerHelpers.new(self)
+        @programmable_scaffold_controller_helpers ||= ::ProgrammableScaffoldRails::ActionControllerHelpers.new(self)
       end
 
     end

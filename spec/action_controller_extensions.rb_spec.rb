@@ -46,12 +46,12 @@ describe ProgrammableScaffoldRails::ActionControllerExtensions do
       obj.stub(:controller_name) { 'stubbeds' }
       obj
     end
-      specify { controller.should respond_to(:new) }
-      specify { controller.should respond_to(:create) }
-      specify { controller.should respond_to(:index) }
-      specify { controller.should respond_to(:show) }
-      specify { controller.should respond_to(:edit) }
-      specify { controller.should respond_to(:update) }
+      specify { controller.should respond_to(:new)     }
+      specify { controller.should respond_to(:create)  }
+      specify { controller.should respond_to(:index)   }
+      specify { controller.should respond_to(:show)    }
+      specify { controller.should respond_to(:edit)    }
+      specify { controller.should respond_to(:update)  }
       specify { controller.should respond_to(:destroy) }
 
   end
