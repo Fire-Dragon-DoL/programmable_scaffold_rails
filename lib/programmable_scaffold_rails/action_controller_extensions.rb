@@ -18,6 +18,14 @@ module ProgrammableScaffoldRails
 
     extend ActiveSupport::Concern
 
+    module InstanceHelpers
+
+      def programmable_scaffold_controller_helpers
+        @programmable_scaffold_controller_helpers ||= ::ProgrammableScaffoldRails::ActionControllerHelpers.new(self)
+      end
+
+    end
+
     module ClassMethods
 
       # This is the core method which generate the scaffold things.
@@ -37,13 +45,15 @@ module ProgrammableScaffoldRails
         crud = options[:only]          if options.include?(:only)
         crud = crud - options[:except] if options.include?(:except)
 
-        send(:include, ProgrammableScaffoldRails::Scaffold::New)     if crud.include?(:new)
-        send(:include, ProgrammableScaffoldRails::Scaffold::Create)  if crud.include?(:create)
-        send(:include, ProgrammableScaffoldRails::Scaffold::Index)   if crud.include?(:index)
-        send(:include, ProgrammableScaffoldRails::Scaffold::Show)    if crud.include?(:show)
-        send(:include, ProgrammableScaffoldRails::Scaffold::Edit)    if crud.include?(:edit)
-        send(:include, ProgrammableScaffoldRails::Scaffold::Update)  if crud.include?(:update)
-        send(:include, ProgrammableScaffoldRails::Scaffold::Destroy) if crud.include?(:destroy)
+        send( :include, ProgrammableScaffoldRails::ActionControllerExtensions::InstanceHelpers )
+
+        send( :include, ProgrammableScaffoldRails::Scaffold::New     ) if crud.include?(:new)
+        send( :include, ProgrammableScaffoldRails::Scaffold::Create  ) if crud.include?(:create)
+        send( :include, ProgrammableScaffoldRails::Scaffold::Index   ) if crud.include?(:index)
+        send( :include, ProgrammableScaffoldRails::Scaffold::Show    ) if crud.include?(:show)
+        send( :include, ProgrammableScaffoldRails::Scaffold::Edit    ) if crud.include?(:edit)
+        send( :include, ProgrammableScaffoldRails::Scaffold::Update  ) if crud.include?(:update)
+        send( :include, ProgrammableScaffoldRails::Scaffold::Destroy ) if crud.include?(:destroy)
 
         # Store
         const_set(:PROGRAMMABLE_SCAFFOLD, OpenStruct.new(options).freeze)
@@ -53,14 +63,6 @@ module ProgrammableScaffoldRails
 
       def programmable_scaffold_options
         const_get(:PROGRAMMABLE_SCAFFOLD)
-      end
-
-    end
-
-    module InstanceMethods
-
-      def programmable_scaffold_controller_helpers
-        @programmable_scaffold_controller_helpers ||= ::ProgrammableScaffoldRails::ActionControllerHelpers.new(self)
       end
 
     end

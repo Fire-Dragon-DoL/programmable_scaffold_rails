@@ -13,8 +13,15 @@ module ProgrammableScaffoldRails
     def klass
       return @klass if @klass
 
-      @klass = options[:class].to_s || parent.controller_name.to_s
+      @klass = options[:class_name].try(:to_s) || @parent.controller_name.to_s
       @klass = @klass.classify.constantize
+    end
+
+    def table
+      return @table if @table
+
+      @table = options[:table_name].try(:to_s) || klass.to_s
+      @table = @table.tableize.to_sym
     end
 
     private
