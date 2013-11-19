@@ -1,3 +1,5 @@
+require 'programmable_scaffold_rails/action_controller_helpers'
+
 module ProgrammableScaffoldRails
 
   module Scaffold

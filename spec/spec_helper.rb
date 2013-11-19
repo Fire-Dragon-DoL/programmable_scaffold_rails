@@ -4,7 +4,7 @@ require 'rubygems'
 require 'combustion'
 require 'bundler/setup'
 
-Bundler.require(:development)
+Bundler.require(:default, :development, :test)
 
 require 'rails'
 require 'rails/all'

@@ -1,6 +1,6 @@
 require 'ostruct'
-# require 'active_support'
-# require 'active_support/core_ext'
+require 'active_support'
+require 'active_support/core_ext'
 
 require 'programmable_scaffold_rails/config'
 require 'programmable_scaffold_rails/action_controller_helpers'
