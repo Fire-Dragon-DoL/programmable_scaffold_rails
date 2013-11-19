@@ -5,8 +5,9 @@ module ProgrammableScaffoldRails
     module New
 
       def new
-        self.instance_variable_set(self.programmable_scaffold_options.single_instance,
-                                   self.programmable_scaffold_options.klass.new)
+        scaffold_helper = self.programmable_scaffold_controller_helpers
+        self.instance_variable_set(scaffold_helper.single_instance,
+                                   scaffold_helper.klass.new)
       end
       
     end

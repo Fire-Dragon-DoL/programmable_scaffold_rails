@@ -67,11 +67,11 @@ module ProgrammableScaffoldRails
       @strong_params = options[:strong_params].try(:to_sym)
     end
 
-    def call_strong_params(controller)
-      unless controller.respond_to?(strong_params)
+    def call_strong_params
+      unless @parent.respond_to?(strong_params)
         raise NotImplementedError, 'No strong_params method specified'
       end
-      controller.send(strong_params)
+      @parent.send(strong_params)
     end
 
     private

@@ -40,7 +40,7 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
 
   it "has not implemented strong_params method that will be called" do
     expect do
-      controller_helpers.call_strong_params(controller)
+      controller_helpers.call_strong_params
     end.to raise_error(NotImplementedError)
   end
 

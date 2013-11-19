@@ -5,8 +5,9 @@ module ProgrammableScaffoldRails
     module Index
 
       def index
-        self.instance_variable_set(self.programmable_scaffold_options.multiple_instances,
-                                   self.programmable_scaffold_options.klass.all)
+        scaffold_helper = self.programmable_scaffold_controller_helpers
+        self.instance_variable_set(scaffold_helper.multiple_instances,
+                                   scaffold_helper.klass.all)
       end
       
     end
