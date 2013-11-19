@@ -61,6 +61,19 @@ module ProgrammableScaffoldRails
       found
     end
 
+    def strong_params
+      return @strong_params if @strong_params
+
+      @strong_params = options[:strong_params].try(:to_sym)
+    end
+
+    def call_strong_params(controller)
+      unless controller.respond_to?(strong_params)
+        raise NotImplementedError, 'No strong_params method specified'
+      end
+      controller.send(strong_params)
+    end
+
     private
 
       def options

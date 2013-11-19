@@ -1,5 +1,6 @@
-cancan:      true
-friendly_id: false
+cancan:        true
+friendly_id:   false
+strong_params: :model_params
 formats:
   - :html
   - :json
