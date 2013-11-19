@@ -36,16 +36,18 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     specify { controller_helpers.friendly_id.should be_false             }
 
   it "can search item without slug" do
+    dummy_model = Dummy.new
     controller_helpers.stub(:klass).and_return(Dummy)
-    Dummy.stub(:find).and_return(nil)
-    controller_helpers.find_by_id_or_friendly_id({ id: 1 }).should be_nil
+    Dummy.stub(:find).and_return(dummy_model)
+    controller_helpers.find_by_id_or_friendly_id({ id: 1 }).should be dummy_model
   end
 
   it "can search item with slug" do
+    dummy_model = Dummy.new
     controller_helpers.stub(:friendly_id).and_return(true)
     controller_helpers.stub(:klass).and_return(Dummy)
     Dummy.stub_chain('friendly.find').and_return(nil)
-    controller_helpers.find_by_id_or_friendly_id({ id: 'dummy' }).should be_nil
+    controller_helpers.find_by_id_or_friendly_id({ id: 'dummy' }).should be dummy_model
   end
 
 end
