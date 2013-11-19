@@ -45,7 +45,7 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
   end
 
   context "when searching in database" do
-    subject(:dummy_model) { Dummy.new }
+    subject(:dummy_model) { Stubbed.new }
 
     it "can search item without slug" do
       controller_helpers.stub_chain('klass.find').and_return(dummy_model)
