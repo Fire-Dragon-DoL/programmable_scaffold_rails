@@ -5,6 +5,7 @@ require 'internal/app/controllers/dummies_controller'
 describe DummiesController do
 
   it "GET #index" do
+    # TODO: Write tests for CRUD actions
     get :index
   end
 

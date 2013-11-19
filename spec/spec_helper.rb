@@ -4,6 +4,11 @@ require 'rubygems'
 require 'combustion'
 require 'bundler/setup'
 
+# Combustion.initialize! :all
+Combustion.initialize! :active_record,
+                       :action_controller,
+                       :action_view
+
 Bundler.require(:default, :development, :test)
 
 require 'rails'
