@@ -1,11 +1,12 @@
 $LOAD_PATH << File.expand_path("../../lib", __FILE__)
 
 require 'rubygems'
-require 'bundler/setup'
 require 'combustion'
+require 'bundler/setup'
 
 Bundler.require(:development)
 
+require 'rails'
 require 'rails/all'
 require 'rspec/rails'
 require 'factories'
