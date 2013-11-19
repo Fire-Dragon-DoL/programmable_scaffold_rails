@@ -46,7 +46,7 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     dummy_model = Dummy.new
     controller_helpers.stub(:friendly_id).and_return(true)
     controller_helpers.stub(:klass).and_return(Dummy)
-    Dummy.stub_chain('friendly.find').and_return(nil)
+    Dummy.stub_chain('friendly.find').and_return(dummy_model)
     controller_helpers.find_by_id_or_friendly_id({ id: 'dummy' }).should be dummy_model
   end
 
