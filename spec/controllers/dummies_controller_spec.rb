@@ -1,11 +1,11 @@
 require 'spec_helper'
 require 'internal/app/controllers/dummies_controller'
 
+
 describe DummiesController do
 
-  it "POST #create" do
-    post :index
-    controller.instance_variable_get(:@dummy).should_not be_nil
+  it "GET #index" do
+    get :index
   end
 
         # @user = User.new(user_params)
