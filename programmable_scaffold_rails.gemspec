@@ -21,8 +21,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rails",         "~> 4.0.0"
   spec.add_dependency "activesupport", "~> 4.0.0"
 
-  spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rspec",   "~> 2.14.0"
+  spec.add_development_dependency "bundler",    "~> 1.3"
+  spec.add_development_dependency "rspec",      "~> 2.14.0"
+  spec.add_development_dependency "combustion", "~> 0.5.1"
+  spec.add_development_dependency "sqlite3",    "~> 1.3.8"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rake"
 end

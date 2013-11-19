@@ -4,10 +4,9 @@ module ProgrammableScaffoldRails
 
     module New
 
-      # TODO: Required a way to test controllers, see combustion gem
       def new
-        self.instance_variable_set(self.programmable_scaffold_options.multiple_instances,
-                                   self.programmable_scaffold_options.klass.all)
+        self.instance_variable_set(self.programmable_scaffold_options.single_instance,
+                                   self.programmable_scaffold_options.klass.new)
       end
       
     end

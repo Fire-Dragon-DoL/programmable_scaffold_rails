@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'programmable_scaffold_rails/action_controller_helpers'
+require 'internal/app/models/dummy'
 
 describe ProgrammableScaffoldRails::ActionControllerHelpers do
   class Stubbed
@@ -20,16 +21,31 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
 
   it { controller.should respond_to(:programmable_scaffold_controller_helpers) }
 
-  subject(:controller_options) { controller.programmable_scaffold_controller_helpers }
-    specify { controller_options.should respond_to(:klass)               }
-    specify { controller_options.should respond_to(:table)               }
-    specify { controller_options.should respond_to(:single_instance)     }
-    specify { controller_options.should respond_to(:multiple_instances)  }
-    specify { controller_options.should respond_to(:url_namespace)       }
-    specify { controller_options.klass.should be Stubbed                 }
-    specify { controller_options.table.should be :stubbeds               }
-    specify { controller_options.single_instance.should be :@stubbed     }
-    specify { controller_options.multiple_instances.should be :@stubbeds }
-    specify { controller_options.url_namespace.should match ''           }
+  subject(:controller_helpers) { controller.programmable_scaffold_controller_helpers }
+    specify { controller_helpers.should respond_to(:klass)               }
+    specify { controller_helpers.should respond_to(:table)               }
+    specify { controller_helpers.should respond_to(:single_instance)     }
+    specify { controller_helpers.should respond_to(:multiple_instances)  }
+    specify { controller_helpers.should respond_to(:url_namespace)       }
+    specify { controller_helpers.should respond_to(:friendly_id)         }
+    specify { controller_helpers.klass.should be Stubbed                 }
+    specify { controller_helpers.table.should be :stubbeds               }
+    specify { controller_helpers.single_instance.should be :@stubbed     }
+    specify { controller_helpers.multiple_instances.should be :@stubbeds }
+    specify { controller_helpers.url_namespace.should match ''           }
+    specify { controller_helpers.friendly_id.should be_false             }
+
+  it "can search item without slug" do
+    controller_helpers.stub(:klass).and_return(Dummy)
+    Dummy.stub(:find).and_return(nil)
+    controller_helpers.find_by_id_or_friendly_id({ id: 1 }).should be_nil
+  end
+
+  it "can search item with slug" do
+    controller_helpers.stub(:friendly_id).and_return(true)
+    controller_helpers.stub(:klass).and_return(Dummy)
+    Dummy.stub_chain('friendly.find').and_return(nil)
+    controller_helpers.find_by_id_or_friendly_id({ id: 'dummy' }).should be_nil
+  end
 
 end

@@ -44,6 +44,23 @@ module ProgrammableScaffoldRails
       @url_namespace = options[:url_namespace].try(:to_s) || ''
     end
 
+    def friendly_id
+      return @friendly_id if @friendly_id
+
+      @friendly_id = !!options[:friendly_id]
+    end
+
+    def find_by_id_or_friendly_id(params)
+      found = nil
+      if friendly_id && klass.respond_to?(:friendly)
+        found = klass.friendly.find(params[:id])
+      else
+        found = klass.find(params[:id])
+      end
+
+      found
+    end
+
     private
 
       def options

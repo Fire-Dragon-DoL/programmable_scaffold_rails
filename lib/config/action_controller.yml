@@ -1,4 +1,5 @@
-cancan: true
+cancan:      true
+friendly_id: false
 formats:
   - :html
   - :json

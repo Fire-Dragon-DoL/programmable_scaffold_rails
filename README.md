@@ -25,6 +25,8 @@ In your Controller (or in ApplicationController) include the module:
 
     include ProgrammableScaffoldRails::ActionControllerExtensions
 
+It has friendly_id support
+
 ## Contributing
 
 1. Fork it
