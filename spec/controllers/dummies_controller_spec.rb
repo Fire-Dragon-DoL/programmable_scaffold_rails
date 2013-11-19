@@ -3,10 +3,16 @@ require 'internal/app/controllers/dummies_controller'
 
 
 describe DummiesController do
+  before do
+    controller.stub(:render).with(any_args()).and_return(nil)
+  end
 
   it "GET #index" do
-    # TODO: Write tests for CRUD actions
+    dummies = FactoryGirl.create_list(:dummy, 2)
+
     get :index
+
+    assigns(:dummies).should match_array(dummies)
   end
 
         # @user = User.new(user_params)
