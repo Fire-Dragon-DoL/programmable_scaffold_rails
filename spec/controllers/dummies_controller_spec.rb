@@ -134,9 +134,13 @@ describe DummiesController do
       controller_helpers = controller.programmable_scaffold_controller_helpers
       dummy_params = FactoryGirl.attributes_for(:dummy)
 
-      controller_helpers.should_receive(:after_create_url).with(kind_of(ActiveRecord::Base))
+      controller_helpers.should_receive(:after_create_url)
+                        .with(kind_of(ActiveRecord::Base))
+                        .and_call_original
       post :create, dummy: dummy_params
     end
+
+    # TODO: Test for after_create_url when customized by the user and when not
 
   end
 
