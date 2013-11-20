@@ -10,7 +10,7 @@ describe DummiesController do
   it "GET #new" do
     get :new
 
-    assigns(:dummy).should_not be instance_of(Dummy)
+    assigns(:dummy).should be_an_instance_of(Dummy)
   end
 
   it "POST #create" do
