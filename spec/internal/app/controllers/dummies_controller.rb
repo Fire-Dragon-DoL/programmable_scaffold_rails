@@ -4,6 +4,6 @@ class DummiesController < ActionController::Base
   programmable_scaffold
 
   def model_params
-    params.require(:dummy).permit(:name)
+    params.require(:dummy).permit(:name, :will_invalidate)
   end
 end
