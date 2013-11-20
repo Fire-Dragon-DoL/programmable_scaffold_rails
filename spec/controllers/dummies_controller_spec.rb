@@ -130,11 +130,11 @@ describe DummiesController do
 
   context "POST #create" do
 
-    it "calls after_create_url with createdobject and success result" do
+    it "calls after_create_url with created object" do
       controller_helpers = controller.programmable_scaffold_controller_helpers
       dummy_params = FactoryGirl.attributes_for(:dummy)
 
-      controller_helpers.should_receive(:after_update_url).with(instance_of(ActiveRecord::Base))
+      controller_helpers.should_receive(:after_create_url).with(kind_of(ActiveRecord::Base))
       post :create, dummy: dummy_params
     end
 
