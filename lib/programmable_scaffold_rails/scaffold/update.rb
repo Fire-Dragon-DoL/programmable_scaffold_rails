@@ -15,10 +15,13 @@ module ProgrammableScaffoldRails
         
         respond_to do |format|
           if instance.update(scaffold_helper.call_strong_params)
-            format.html { redirect_to instance, notice: 'User was successfully updated.' }
+            format.html { redirect_to instance, notice: I18n.t('programmable_scaffold_rails.after_update_notice') }
             format.json { head :no_content }
           else
-            format.html { render action: 'edit' }
+            format.html do
+              flash.alert = I18n.t('programmable_scaffold_rails.after_update_alert')
+              render action: 'edit'
+            end
             format.json { render json: instance.errors, status: :unprocessable_entity }
           end
         end

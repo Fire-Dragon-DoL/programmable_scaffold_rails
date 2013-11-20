@@ -17,7 +17,8 @@ module ProgrammableScaffoldRails
 
         respond_to do |format|
           if instance.save
-            format.html { redirect_to instance, notice: 'User was successfully created.' }
+            format.html { redirect_to scaffold_helper.after_create_url(instance),
+                                      notice: 'User was successfully created.' }
             format.json { render action: 'show', status: :created, location: instance }
           else
             format.html { render action: 'new' }

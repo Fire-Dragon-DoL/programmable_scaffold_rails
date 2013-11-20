@@ -4,7 +4,7 @@ require 'internal/app/controllers/dummies_controller'
 
 describe DummiesController do
   before(:each) do
-    controller.stub(:authorize!).with(instance_of(Symbol), anything()).and_return(true)
+    controller.stub(:authorize!).with(anything(), anything()).and_return(true)
   end
 
   it "GET #new" do
@@ -62,7 +62,7 @@ describe DummiesController do
 
   context "without authorization" do
     before(:each) do
-      controller.stub(:authorize!).with(instance_of(Symbol), anything()).and_throw
+      controller.stub(:authorize!).with(anything(), anything()).and_raise
     end
 
     it "GET #new" do
@@ -124,6 +124,18 @@ describe DummiesController do
       put :update, id: dummy.id, dummy: { name: dummy_name, will_invalidate: true }
 
       response.should render_template('edit')
+    end
+
+  end
+
+  context "POST #create" do
+
+    it "calls after_create_url with createdobject and success result" do
+      controller_helpers = controller.programmable_scaffold_controller_helpers
+      dummy_params = FactoryGirl.attributes_for(:dummy)
+
+      controller_helpers.should_receive(:after_update_url).with(instance_of(ActiveRecord::Base))
+      post :create, dummy: dummy_params
     end
 
   end

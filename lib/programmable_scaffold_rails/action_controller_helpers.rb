@@ -13,7 +13,7 @@ module ProgrammableScaffoldRails
     def klass
       return @klass if @klass
 
-      @klass = options[:class_name].try(:to_s) || @parent.controller_name.to_s
+      @klass = options[:class_name].try(:to_s) || controller.controller_name.to_s
       @klass = @klass.classify.constantize
     end
 
@@ -80,11 +80,27 @@ module ProgrammableScaffoldRails
     end
 
     def call_strong_params
-      unless @parent.respond_to?(strong_params)
+      unless controller.respond_to?(strong_params)
         raise NotImplementedError, 'No strong_params method specified'
       end
-      @parent.send(strong_params)
+      controller.send(strong_params)
     end
+
+    def after_create_url(obj)
+      controller.url_for(obj)
+    end
+
+    def after_update_url(obj)
+    end
+
+    def after_destroy_url(obj)
+    end
+
+    protected
+
+      def controller
+        @parent
+      end
 
     private
 

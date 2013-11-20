@@ -1,6 +1,9 @@
-cancan:        true
-friendly_id:   false
-strong_params: :model_params
+cancan:            true
+friendly_id:       false
+strong_params:     :model_params
+after_update_url:  ~
+after_create_url:  ~
+after_destroy_url: ~
 formats:
   - :html
   - :json

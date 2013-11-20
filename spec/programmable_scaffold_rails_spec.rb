@@ -3,6 +3,7 @@ require 'spec_helper'
 require 'programmable_scaffold_rails/config'
 
 describe ProgrammableScaffoldRails do
+
   subject(:base_options) { described_class::BASE_OPTIONS }
     specify { base_options.should_not be_nil                                }
     specify { base_options.should have_key(:cancan)                         }

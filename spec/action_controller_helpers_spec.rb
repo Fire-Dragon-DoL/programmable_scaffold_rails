@@ -33,6 +33,9 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     specify { controller_helpers.should respond_to(:strong_params)           }
     specify { controller_helpers.should respond_to(:call_strong_params)      }
     specify { controller_helpers.should respond_to(:cancan)                  }
+    specify { controller_helpers.should respond_to(:after_update_url)        }
+    specify { controller_helpers.should respond_to(:after_create_url)        }
+    specify { controller_helpers.should respond_to(:after_destroy_url)       }
     specify { controller_helpers.klass.should be Stubbed                     }
     specify { controller_helpers.table.should be :stubbeds                   }
     specify { controller_helpers.single_instance_name.should be :stubbed     }
@@ -62,7 +65,7 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     it "can search item with slug" do
       controller_helpers.stub(:friendly_id).and_return(true)
       controller_helpers.stub_chain('klass.friendly.find').and_return(dummy_model)
-      
+
       controller_helpers.find_by_id_or_friendly_id({ id: 'dummy' }).should be dummy_model
     end    
   end
