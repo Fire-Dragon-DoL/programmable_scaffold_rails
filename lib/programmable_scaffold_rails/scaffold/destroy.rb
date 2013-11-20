@@ -10,6 +10,14 @@ module ProgrammableScaffoldRails
         scaffold_helper = self.programmable_scaffold_controller_helpers
         self.instance_variable_set(scaffold_helper.single_instance,
                                    scaffold_helper.find_by_id_or_friendly_id(params))
+        instance = self.instance_variable_get(scaffold_helper.single_instance)
+
+        instance.destroy
+        
+        respond_to do |format|
+          format.html { redirect_to url_for(:dummies) }
+          format.json { head :no_content }
+        end
       end
       
     end
