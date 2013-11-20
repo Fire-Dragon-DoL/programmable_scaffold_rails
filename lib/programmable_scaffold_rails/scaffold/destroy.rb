@@ -16,7 +16,7 @@ module ProgrammableScaffoldRails
         instance.destroy
         
         respond_to do |format|
-          format.html { redirect_to url_for(:dummies) }
+          format.html { redirect_to url_for(scaffold_helper.multiple_instances_name) }
           format.json { head :no_content }
         end
       end

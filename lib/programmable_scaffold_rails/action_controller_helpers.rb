@@ -25,7 +25,7 @@ module ProgrammableScaffoldRails
     end
 
     def cancan
-      return @cancan if @cancan
+      return @cancan unless @cancan.nil?
 
       @cancan = !!options[:cancan]
     end
@@ -38,10 +38,7 @@ module ProgrammableScaffoldRails
     end
 
     def single_instance
-      return @single_instance if @single_instance
-
-      @single_instance = options[:single_instance_name].try(:to_s) || table.to_s
-      @single_instance = "@#{ @single_instance.singularize }".to_sym
+      @single_instance ||= "@#{ single_instance_name }".to_sym
     end
 
     def multiple_instances_name
@@ -52,10 +49,7 @@ module ProgrammableScaffoldRails
     end
 
     def multiple_instances
-      return @multiple_instances if @multiple_instances
-
-      @multiple_instances = options[:multiple_instances_name].try(:to_s) || table.to_s
-      @multiple_instances = "@#{ @multiple_instances.pluralize }".to_sym
+      @multiple_instances ||= "@#{ multiple_instances_name }".to_sym
     end
 
     def url_namespace
@@ -65,7 +59,7 @@ module ProgrammableScaffoldRails
     end
 
     def friendly_id
-      return @friendly_id if @friendly_id
+      return @friendly_id unless @friendly_id.nil?
 
       @friendly_id = !!options[:friendly_id]
     end
@@ -82,9 +76,7 @@ module ProgrammableScaffoldRails
     end
 
     def strong_params
-      return @strong_params if @strong_params
-
-      @strong_params = options[:strong_params].try(:to_sym)
+      @strong_params ||= options[:strong_params].try(:to_sym)
     end
 
     def call_strong_params
