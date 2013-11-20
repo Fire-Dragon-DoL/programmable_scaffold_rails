@@ -24,11 +24,25 @@ module ProgrammableScaffoldRails
       @table = @table.tableize.to_sym
     end
 
+    def single_instance_name
+      return @single_instance_name if @single_instance_name
+
+      @single_instance_name = options[:single_instance_name].try(:to_s) || table.to_s
+      @single_instance_name = @single_instance_name.singularize.to_sym
+    end
+
     def single_instance
       return @single_instance if @single_instance
 
       @single_instance = options[:single_instance_name].try(:to_s) || table.to_s
       @single_instance = "@#{ @single_instance.singularize }".to_sym
+    end
+
+    def multiple_instances_name
+      return @multiple_instances_name if @multiple_instances_name
+
+      @multiple_instances_name = options[:multiple_instances_name].try(:to_s) || table.to_s
+      @multiple_instances_name = @multiple_instances_name.pluralize.to_sym
     end
 
     def multiple_instances

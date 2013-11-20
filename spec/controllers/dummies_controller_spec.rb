@@ -3,9 +3,6 @@ require 'internal/app/controllers/dummies_controller'
 
 
 describe DummiesController do
-  before do
-    controller.stub(:render).with(any_args()).and_return(nil)
-  end
 
   it "GET #new" do
     get :new
@@ -58,4 +55,5 @@ describe DummiesController do
 
     expect{dummy.class.find(dummy.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
+  
 end

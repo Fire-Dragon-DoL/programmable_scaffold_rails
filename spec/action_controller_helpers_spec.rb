@@ -22,21 +22,25 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
   it { controller.should respond_to(:programmable_scaffold_controller_helpers) }
 
   subject(:controller_helpers) { controller.programmable_scaffold_controller_helpers }
-    specify { controller_helpers.should respond_to(:klass)                 }
-    specify { controller_helpers.should respond_to(:table)                 }
-    specify { controller_helpers.should respond_to(:single_instance)       }
-    specify { controller_helpers.should respond_to(:multiple_instances)    }
-    specify { controller_helpers.should respond_to(:url_namespace)         }
-    specify { controller_helpers.should respond_to(:friendly_id)           }
-    specify { controller_helpers.should respond_to(:strong_params)         }
-    specify { controller_helpers.should respond_to(:call_strong_params)    }
-    specify { controller_helpers.klass.should be Stubbed                   }
-    specify { controller_helpers.table.should be :stubbeds                 }
-    specify { controller_helpers.single_instance.should be :@stubbed       }
-    specify { controller_helpers.multiple_instances.should be :@stubbeds   }
-    specify { controller_helpers.url_namespace.should match ''             }
-    specify { controller_helpers.friendly_id.should be_false               }
-    specify { controller_helpers.strong_params.should be :model_params     }
+    specify { controller_helpers.should respond_to(:klass)                   }
+    specify { controller_helpers.should respond_to(:table)                   }
+    specify { controller_helpers.should respond_to(:single_instance_name)    }
+    specify { controller_helpers.should respond_to(:single_instance)         }
+    specify { controller_helpers.should respond_to(:multiple_instances_name) }
+    specify { controller_helpers.should respond_to(:multiple_instances)      }
+    specify { controller_helpers.should respond_to(:url_namespace)           }
+    specify { controller_helpers.should respond_to(:friendly_id)             }
+    specify { controller_helpers.should respond_to(:strong_params)           }
+    specify { controller_helpers.should respond_to(:call_strong_params)      }
+    specify { controller_helpers.klass.should be Stubbed                     }
+    specify { controller_helpers.table.should be :stubbeds                   }
+    specify { controller_helpers.single_instance_name.should be :stubbed     }
+    specify { controller_helpers.single_instance.should be :@stubbed         }
+    specify { controller_helpers.multiple_instances_name.should be :stubbeds }
+    specify { controller_helpers.multiple_instances.should be :@stubbeds     }
+    specify { controller_helpers.url_namespace.should match ''               }
+    specify { controller_helpers.friendly_id.should be_false                 }
+    specify { controller_helpers.strong_params.should be :model_params       }
 
   it "has not implemented strong_params method that will be called" do
     expect do
