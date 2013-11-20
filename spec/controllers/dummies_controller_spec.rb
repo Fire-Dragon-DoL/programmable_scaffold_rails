@@ -15,6 +15,7 @@ describe DummiesController do
 
   it "POST #create" do
     dummy_params = FactoryGirl.attributes_for(:dummy)
+    
     expect{post :create, dummy: dummy_params}.to change(Dummy, :count).by(1)
   end
 
