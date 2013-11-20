@@ -24,6 +24,12 @@ module ProgrammableScaffoldRails
       @table = @table.tableize.to_sym
     end
 
+    def cancan
+      return @cancan if @cancan
+
+      @cancan = !!options[:cancan]
+    end
+
     def single_instance_name
       return @single_instance_name if @single_instance_name
 

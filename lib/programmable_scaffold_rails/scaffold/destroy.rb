@@ -11,6 +11,7 @@ module ProgrammableScaffoldRails
         self.instance_variable_set(scaffold_helper.single_instance,
                                    scaffold_helper.find_by_id_or_friendly_id(params))
         instance = self.instance_variable_get(scaffold_helper.single_instance)
+        authorize!(:destroy, instance) if scaffold_helper.cancan
 
         instance.destroy
         

@@ -3,8 +3,11 @@ require 'internal/app/controllers/dummies_controller'
 
 
 describe DummiesController do
+  before(:each) do
+    controller.stub(:authorize!).with(instance_of(Symbol), anything()).and_return(true)
+  end
 
-  context "with format :html" do
+  context "with format: :html" do
 
     it "GET #new" do
       get :new
@@ -56,6 +59,53 @@ describe DummiesController do
       delete :destroy, id: dummy.id
 
       expect{dummy.class.find(dummy.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    context "without authorization" do
+      before(:each) do
+        controller.stub(:authorize!).with(instance_of(Symbol), anything()).and_throw
+      end
+
+      it "GET #new" do
+        expect{get :new}.to raise_error
+      end
+
+      it "POST #create" do
+        dummy_params = FactoryGirl.attributes_for(:dummy)
+        expect{post :create, dummy: dummy_params}.to raise_error
+      end
+
+      it "GET #index" do
+        dummies = FactoryGirl.create_list(:dummy, 2)
+
+        expect{get :index}.to raise_error
+      end
+
+      it "GET #show" do
+        dummy = FactoryGirl.create(:dummy)
+
+        expect{get :show, id: dummy.id}.to raise_error
+      end
+
+      it "GET #edit" do
+        dummy = FactoryGirl.create(:dummy)
+
+        expect{get :edit, id: dummy.id}.to raise_error
+      end
+
+      it "PUT/PATCH #update" do
+        dummy_name          = 'dummy2'
+        dummy               = FactoryGirl.create(:dummy, name: 'dummy1')
+
+        expect{put :update, id: dummy.id, dummy: { name: dummy_name }}.to raise_error
+      end
+
+      it "DELETE #destroy" do
+        dummy = FactoryGirl.create(:dummy)
+        
+        expect{delete :destroy, id: dummy.id}.to raise_error
+      end
+
     end
 
     context "with errors" do

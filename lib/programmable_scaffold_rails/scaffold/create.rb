@@ -13,6 +13,7 @@ module ProgrammableScaffoldRails
                                      scaffold_helper.call_strong_params
                                    ))
         instance = self.instance_variable_get(scaffold_helper.single_instance)
+        authorize!(:create, instance) if scaffold_helper.cancan
 
         respond_to do |format|
           if instance.save

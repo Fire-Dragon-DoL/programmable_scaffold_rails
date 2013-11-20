@@ -32,6 +32,7 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     specify { controller_helpers.should respond_to(:friendly_id)             }
     specify { controller_helpers.should respond_to(:strong_params)           }
     specify { controller_helpers.should respond_to(:call_strong_params)      }
+    specify { controller_helpers.should respond_to(:cancan)                  }
     specify { controller_helpers.klass.should be Stubbed                     }
     specify { controller_helpers.table.should be :stubbeds                   }
     specify { controller_helpers.single_instance_name.should be :stubbed     }
@@ -41,6 +42,7 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     specify { controller_helpers.url_namespace.should match ''               }
     specify { controller_helpers.friendly_id.should be_false                 }
     specify { controller_helpers.strong_params.should be :model_params       }
+    specify { controller_helpers.cancan.should be_true                       }
 
   it "has not implemented strong_params method that will be called" do
     expect do
