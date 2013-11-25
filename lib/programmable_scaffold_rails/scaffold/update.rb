@@ -15,14 +15,26 @@ module ProgrammableScaffoldRails
         
         respond_to do |format|
           if instance.update(scaffold_helper.call_strong_params)
-            format.html { redirect_to scaffold_helper.after_update_url(instance), notice: I18n.t('programmable_scaffold_rails.after_update_notice') }
-            format.json { head :no_content }
-          else
-            format.html do
-              flash.alert = I18n.t('programmable_scaffold_rails.after_update_alert')
-              render action: 'edit'
+            scaffold_helper.formats.each do |used_format|
+              case used_format
+              when :html
+                format.html { redirect_to scaffold_helper.after_update_url(instance), notice: I18n.t('programmable_scaffold_rails.after_update_notice') }
+              when :json
+                format.json { head :no_content }
+              end
             end
-            format.json { render json: instance.errors, status: :unprocessable_entity }
+          else
+            scaffold_helper.formats.each do |used_format|
+              case used_format
+              when :html
+                format.html do
+                  flash.alert = I18n.t('programmable_scaffold_rails.after_update_alert')
+                  render action: 'edit'
+                end
+              when :json
+                format.json { render json: instance.errors, status: :unprocessable_entity }
+              end
+            end
           end
         end
       end

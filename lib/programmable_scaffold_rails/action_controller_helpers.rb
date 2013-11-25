@@ -66,6 +66,10 @@ module ProgrammableScaffoldRails
       @after_update_action = options[:after_update_action].try(:to_sym)
     end
 
+    def formats
+      @formats ||= options[:formats]
+    end
+
     def friendly_id
       return @friendly_id unless @friendly_id.nil?
 

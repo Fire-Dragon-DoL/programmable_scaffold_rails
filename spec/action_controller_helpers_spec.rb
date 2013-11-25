@@ -39,6 +39,7 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     specify { controller_helpers.should respond_to(:after_update_url)        }
     specify { controller_helpers.should respond_to(:after_create_url)        }
     specify { controller_helpers.should respond_to(:after_destroy_url)       }
+    specify { controller_helpers.should respond_to(:formats)                 }
     specify { controller_helpers.klass.should be Stubbed                     }
     specify { controller_helpers.table.should be :stubbeds                   }
     specify { controller_helpers.single_instance_name.should be :stubbed     }
@@ -51,6 +52,7 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     specify { controller_helpers.cancan.should be_true                       }
     specify { allowed_after_actions.should include(controller_helpers.after_create_action) }
     specify { allowed_after_actions.should include(controller_helpers.after_update_action) }
+    specify { controller_helpers.formats.should match_array([:html, :json]) }
 
   it "is valid to use nil as after_create_action" do
     controller_helpers.stub(:after_create_action).and_return(nil)

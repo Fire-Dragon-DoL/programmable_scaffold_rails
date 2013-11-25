@@ -17,12 +17,24 @@ module ProgrammableScaffoldRails
 
         respond_to do |format|
           if instance.save
-            format.html { redirect_to scaffold_helper.after_create_url(instance),
-                                      notice: 'User was successfully created.' }
-            format.json { render action: 'show', status: :created, location: instance }
+            scaffold_helper.formats.each do |used_format|
+              case used_format
+              when :html
+                format.html { redirect_to scaffold_helper.after_create_url(instance),
+                                          notice: 'User was successfully created.' }
+              when :json
+                format.json { render action: 'show', status: :created, location: instance }
+              end
+            end
           else
-            format.html { render action: 'new' }
-            format.json { render json: instance.errors, status: :unprocessable_entity }
+            scaffold_helper.formats.each do |used_format|
+              case used_format
+              when :html
+                format.html { render action: 'new' }
+              when :json
+                format.json { render json: instance.errors, status: :unprocessable_entity }
+              end
+            end
           end
         end
       end

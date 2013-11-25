@@ -15,17 +15,29 @@ module ProgrammableScaffoldRails
 
         if instance.destroy
           respond_to do |format|
-            format.html { redirect_to scaffold_helper.after_destroy_url(instance),
-                                      notice: I18n.t('programmable_scaffold_rails.after_destroy_notice') }
-            format.json { head :no_content }
+            scaffold_helper.formats.each do |used_format|
+              case used_format
+              when :html
+                format.html { redirect_to scaffold_helper.after_destroy_url(instance),
+                                          notice: I18n.t('programmable_scaffold_rails.after_destroy_notice') }
+              when :json
+                format.json { head :no_content }
+              end
+            end
           end
         else
           respond_to do |format|
-            # XXX: Check if redirect_to :back doesn't create issues with failing
-            #      destroy and redirect loops
-            format.html { redirect_to :back,
-                                      alert: I18n.t('programmable_scaffold_rails.after_destroy_alert') }
-            format.json { render json: instance.errors, status: :unprocessable_entity }
+            scaffold_helper.formats.each do |used_format|
+              case used_format
+              when :html
+                # XXX: Check if redirect_to :back doesn't create issues with failing
+                #      destroy and redirect loops
+                format.html { redirect_to :back,
+                                          alert: I18n.t('programmable_scaffold_rails.after_destroy_alert') }
+              when :json
+                format.json { render json: instance.errors, status: :unprocessable_entity }
+              end
+            end
           end
         end
       end
