@@ -11,5 +11,5 @@ module ProgrammableScaffoldRails
                    :update,
                    :destroy ].freeze
 
-  BASE_OPTIONS = HashWithIndifferentAccess.new(YAML.load(File.read(File.expand_path('../../config/action_controller.yml', __FILE__))))
+  BASE_OPTIONS = HashWithIndifferentAccess.new(YAML.load(File.read(File.expand_path('../../../config/action_controller.yml', __FILE__))))
 end
