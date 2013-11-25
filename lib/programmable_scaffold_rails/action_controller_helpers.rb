@@ -87,24 +87,15 @@ module ProgrammableScaffoldRails
     end
 
     def after_create_url(obj)
-      after_url = options[:after_create_url]
-      if after_url.class <= Symbol
-        controller.send(after_url, obj)
-      elsif after_url.class <= Proc
-        controller.instance_exec(obj, &after_url)
-      else
-        if url_namespace.blank?
-          controller.url_for(obj)
-        else
-          controller.url_for([url_namespace, obj])
-        end
-      end
+      run_after_url_call(:create, obj)
     end
 
     def after_update_url(obj)
+      run_after_url_call(:update, obj)
     end
 
     def after_destroy_url(obj)
+      run_after_url_call(:destroy, obj)
     end
 
     protected
@@ -117,6 +108,21 @@ module ProgrammableScaffoldRails
 
       def options
         @parent.class.programmable_scaffold_options
+      end
+
+      def run_after_url_call(crud_action, obj)
+        after_url = options[:"after_#{ crud_action }_url"]
+        if after_url.class <= Symbol
+          controller.send(after_url, obj)
+        elsif after_url.class <= Proc
+          controller.instance_exec(obj, &after_url)
+        else
+          if url_namespace.blank?
+            controller.url_for(obj)
+          else
+            controller.url_for([url_namespace, obj])
+          end
+        end
       end
 
   end
