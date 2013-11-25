@@ -18,6 +18,7 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
 
     obj
   end
+  let(:allowed_after_actions) { [nil, :edit, :show] }
 
   it { controller.should respond_to(:programmable_scaffold_controller_helpers) }
 
@@ -33,6 +34,8 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     specify { controller_helpers.should respond_to(:strong_params)           }
     specify { controller_helpers.should respond_to(:call_strong_params)      }
     specify { controller_helpers.should respond_to(:cancan)                  }
+    specify { controller_helpers.should respond_to(:after_create_action)     }
+    specify { controller_helpers.should respond_to(:after_update_action)     }
     specify { controller_helpers.should respond_to(:after_update_url)        }
     specify { controller_helpers.should respond_to(:after_create_url)        }
     specify { controller_helpers.should respond_to(:after_destroy_url)       }
@@ -46,6 +49,18 @@ describe ProgrammableScaffoldRails::ActionControllerHelpers do
     specify { controller_helpers.friendly_id.should be_false                 }
     specify { controller_helpers.strong_params.should be :model_params       }
     specify { controller_helpers.cancan.should be_true                       }
+    specify { allowed_after_actions.should include(controller_helpers.after_create_action) }
+    specify { allowed_after_actions.should include(controller_helpers.after_update_action) }
+
+  it "is valid to use nil as after_create_action" do
+    controller_helpers.stub(:after_create_action).and_return(nil)
+    allowed_after_actions.should include(controller_helpers.after_create_action)
+  end
+
+  it "is valid to use nil as after_update_action" do
+    controller_helpers.stub(:after_update_action).and_return(nil)
+    allowed_after_actions.should include(controller_helpers.after_update_action)
+  end
 
   it "has not implemented strong_params method that will be called" do
     expect do

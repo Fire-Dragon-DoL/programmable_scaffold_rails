@@ -15,7 +15,7 @@ module ProgrammableScaffoldRails
 
         if instance.destroy
           respond_to do |format|
-            format.html { redirect_to url_for(scaffold_helper.multiple_instances_name),
+            format.html { redirect_to scaffold_helper.after_destroy_url(instance),
                                       notice: I18n.t('programmable_scaffold_rails.after_destroy_notice') }
             format.json { head :no_content }
           end

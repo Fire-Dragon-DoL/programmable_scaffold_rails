@@ -1,9 +1,12 @@
-cancan:            true
-friendly_id:       false
-strong_params:     :model_params
-after_update_url:  ~
-after_create_url:  ~
-after_destroy_url: ~
+cancan:              true
+friendly_id:         false
+strong_params:       :model_params
+# nil is used for :show (both can be used)
+after_create_action: :show
+after_update_action: :show
+after_update_url:    ~
+after_create_url:    ~
+after_destroy_url:   ~
 formats:
   - :html
   - :json

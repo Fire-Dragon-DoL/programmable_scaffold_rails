@@ -128,10 +128,10 @@ describe DummiesController do
 
   end
 
-  context "POST #create" do
+  context "after_XXX_url" do
     let(:controller_helpers) { controller_helpers = controller.programmable_scaffold_controller_helpers }
 
-    it "calls after_create_url with created object" do
+    its "called during POST #create" do
       dummy_params = FactoryGirl.attributes_for(:dummy)
 
       controller_helpers.should_receive(:after_create_url)
@@ -140,42 +140,86 @@ describe DummiesController do
       post :create, dummy: dummy_params
     end
 
-  end
+    its "called during PUT/PATCH #update" do
+      dummy_name          = 'dummy2'
+      dummy               = FactoryGirl.create(:dummy, name: 'dummy1')
 
-  context "after_XXX_url" do
-    [:create, :update, :destroy].each do |crud_action|
-      let(:controller_helpers) { controller_helpers = controller.programmable_scaffold_controller_helpers }
+      controller_helpers.should_receive(:after_update_url)
+                        .with(kind_of(ActiveRecord::Base))
+                        .and_call_original
+      put :update, id: dummy.id, dummy: { name: dummy_name }
+    end
+
+    it "called during DELETE #destroy" do
+      dummy = FactoryGirl.create(:dummy)
+
+      controller_helpers.should_receive(:after_destroy_url)
+                        .with(kind_of(ActiveRecord::Base))
+                        .and_call_original
+      
+      delete :destroy, id: dummy.id
+    end
+
+    context "runs with namespace set" do
       let(:dummy) { FactoryGirl.create(:dummy) }
 
-      it "returns an url with namespace when is set" do
+      it "after_create_url returns an url with namespace when is set" do
         controller_helpers.stub(:url_namespace).and_return('admin')
 
-        controller_helpers.send(:"after_#{ crud_action }_url", dummy).should match "/admin/dummies/#{ dummy.id }"
+        controller_helpers.send(:after_create_url, dummy).should end_with "/admin/dummies/#{ dummy.id }"
       end
 
-      it "returns an url without namespace when is not set" do
-        controller_helpers.send(:"after_#{ crud_action }_url", dummy).should match "/dummies/#{ dummy.id }"
+      it "after_create_url returns an url without namespace when is not set" do
+        controller_helpers.send(:after_create_url, dummy).should end_with "/dummies/#{ dummy.id }"
       end
 
-      its "called with a symbol and runs a method on the controller with after_#{ crud_action }_url name" do
-        old_options                                = controller_helpers.send(:options).dup
-        old_options[:"after_#{ crud_action }_url"] = :"dummy_after_#{ crud_action }_url"
-        controller_helpers.stub(:options).and_return(old_options.freeze)
-        controller.stub(:"dummy_after_#{ crud_action }_url").with(anything()).and_return(controller.dummies_url)
+      it "after_update_url returns an url with namespace when is set" do
+        controller_helpers.stub(:url_namespace).and_return('admin')
 
-        controller_helpers.send(:"after_#{ crud_action }_url", dummy).should match controller.dummies_url
+        controller_helpers.send(:after_update_url, dummy).should end_with "/admin/dummies/#{ dummy.id }"
       end
 
-      its "called with a proc and runs it" do
-        old_options                    = controller_helpers.send(:options).dup
-        # XXX: Notice that in this case self is == to controller because code is
-        #      instance_exec-uted
-        old_options[:"after_#{ crud_action }_url"] = ->(obj) { self.dummies_url }
-        controller_helpers.stub(:options).and_return(old_options.freeze)
+      it "after_update_url returns an url without namespace when is not set" do
+        controller_helpers.send(:after_update_url, dummy).should end_with "/dummies/#{ dummy.id }"
+      end
 
-        controller_helpers.send(:"after_#{ crud_action }_url", dummy).should match controller.dummies_url
+      it "after_destroy_url returns an url with namespace when is set" do
+        controller_helpers.stub(:url_namespace).and_return('admin')
+
+        controller_helpers.send(:after_destroy_url, dummy).should end_with "/admin/dummies"
+      end
+
+      it "after_destroy_url returns an url without namespace when is not set" do
+        controller_helpers.send(:after_destroy_url, dummy).should end_with "/dummies"
+      end
+
+    end
+
+    [:create, :update, :destroy].each do |crud_action|
+      context "#{ crud_action }" do
+        let(:dummy) { FactoryGirl.create(:dummy) }
+        let(:old_options) { controller_helpers.send(:options).dup }
+
+        its "called with a symbol and runs a method on the controller with after_#{ crud_action }_url name" do
+          old_options[:"after_#{ crud_action }_url"] = :"dummy_after_#{ crud_action }_url"
+          controller_helpers.stub(:options).and_return(old_options.freeze)
+          controller.stub(:"dummy_after_#{ crud_action }_url").with(anything()).and_return(controller.dummies_url)
+
+          controller_helpers.send(:"after_#{ crud_action }_url", dummy).should match controller.dummies_url
+        end
+
+        its "called with a proc and runs it" do
+          # XXX: Notice that in this case self is == to controller because code is
+          #      instance_exec-uted
+          old_options[:"after_#{ crud_action }_url"] = ->(obj) { self.dummies_url }
+          controller_helpers.stub(:options).and_return(old_options.freeze)
+
+          controller_helpers.send(:"after_#{ crud_action }_url", dummy).should match controller.dummies_url
+        end
+
       end
     end
+
 
   end
 

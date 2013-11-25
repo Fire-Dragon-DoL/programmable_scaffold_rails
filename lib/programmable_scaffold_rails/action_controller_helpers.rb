@@ -58,6 +58,14 @@ module ProgrammableScaffoldRails
       @url_namespace = options[:url_namespace].try(:to_s) || ''
     end
 
+    def after_create_action
+      @after_create_action = options[:after_create_action].try(:to_sym)
+    end
+
+    def after_update_action
+      @after_update_action = options[:after_update_action].try(:to_sym)
+    end
+
     def friendly_id
       return @friendly_id unless @friendly_id.nil?
 
@@ -87,18 +95,41 @@ module ProgrammableScaffoldRails
     end
 
     def after_create_url(obj)
-      run_after_url_call(:create, obj)
+      run_after_url_call_or_yield(:create, obj) { after_create_or_update_default_url(:create, obj) }
     end
 
     def after_update_url(obj)
-      run_after_url_call(:update, obj)
+      run_after_url_call_or_yield(:update, obj) { after_create_or_update_default_url(:create, obj) }
     end
 
     def after_destroy_url(obj)
-      run_after_url_call(:destroy, obj)
+      run_after_url_call_or_yield(:destroy, obj) do
+        if url_namespace.blank?
+          controller.url_for(multiple_instances_name)
+        else
+          controller.url_for([url_namespace, multiple_instances_name])
+        end
+      end
     end
 
     protected
+
+      def after_create_or_update_default_url(crud_action, obj)
+        after_action = send(:"after_#{ crud_action }_action")
+        if url_namespace.blank?
+          if after_action.nil? || after_action == :show
+            controller.url_for(obj)
+          else # :edit
+            controller.url_for([:edit, obj])
+          end
+        else
+          if after_action.nil? || after_action == :show
+            controller.url_for([url_namespace, obj])
+          else # :edit
+            controller.url_for([:edit, url_namespace, obj])
+          end
+        end
+      end
 
       def controller
         @parent
@@ -110,18 +141,14 @@ module ProgrammableScaffoldRails
         @parent.class.programmable_scaffold_options
       end
 
-      def run_after_url_call(crud_action, obj)
+      def run_after_url_call_or_yield(crud_action, obj)
         after_url = options[:"after_#{ crud_action }_url"]
         if after_url.class <= Symbol
           controller.send(after_url, obj)
         elsif after_url.class <= Proc
           controller.instance_exec(obj, &after_url)
         else
-          if url_namespace.blank?
-            controller.url_for(obj)
-          else
-            controller.url_for([url_namespace, obj])
-          end
+          yield
         end
       end
 
