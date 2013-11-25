@@ -151,6 +151,8 @@ module ProgrammableScaffoldRails
           controller.send(after_url, obj)
         elsif after_url.class <= Proc
           controller.instance_exec(obj, &after_url)
+        elsif after_url.class <= String
+          controller.url_for(after_url)
         else
           yield
         end

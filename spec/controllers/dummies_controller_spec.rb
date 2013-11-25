@@ -271,31 +271,139 @@ describe DummiesController do
           controller_helpers.send(:"after_#{ crud_action }_url", dummy).should match controller.dummies_url
         end
 
+        its "called with a string and runs it" do
+          # XXX: Notice that in this case self is == to controller because code is
+          #      instance_exec-uted
+          dummy_text                                 = "http://www.dummy.com"
+          old_options[:"after_#{ crud_action }_url"] = dummy_text
+          controller_helpers.stub(:options).and_return(old_options.freeze)
+
+          controller_helpers.send(:"after_#{ crud_action }_url", dummy).should match dummy_text
+        end
+
       end
     end
 
     context "I18n flash message" do
       before(:each) do
+        request.env["HTTP_REFERER"] = controller.dummies_url
         I18n.locale = :en
       end
 
       context "with valid data" do
 
-        it "POST #create calls I18n", focus: true do
+        it "POST #create calls I18n" do
           dummy_params = FactoryGirl.attributes_for(:dummy)
 
-          I18n.should_receive(:translate)
-                        .with(any_arguments())
+          I18n.should_receive(:t)
+                        .with(any_args())
                         .and_call_original
 
           post :create, dummy: dummy_params
+        end
+
+        it "PUT/PATCH #update calls I18n" do
+          dummy_name          = 'dummy2'
+          dummy               = FactoryGirl.create(:dummy, name: 'dummy1')
+
+          I18n.should_receive(:t)
+                        .with(any_args())
+                        .and_call_original
+
+          put :update, id: dummy.id, dummy: { name: dummy_name }
+        end
+
+        it "DELETE #destroy calls I18n" do
+          dummy = FactoryGirl.create(:dummy)
+          
+          I18n.should_receive(:t)
+                        .with(any_args())
+                        .and_call_original
+                        
+          delete :destroy, id: dummy.id
         end
 
         it "POST #create set correct flash notice" do
           dummy_params = FactoryGirl.attributes_for(:dummy)          
           post :create, dummy: dummy_params
 
-          flash[:notice].should match 'was successfully created.'
+          flash[:notice].should match 'Dummy was successfully created.'
+        end
+
+        it "PUT/PATCH #update set correct flash notice" do
+          dummy_name          = 'dummy2'
+          dummy               = FactoryGirl.create(:dummy, name: 'dummy1')
+          put :update, id: dummy.id, dummy: { name: dummy_name }
+
+          flash[:notice].should match 'Dummy was successfully updated.'
+        end
+
+        it "DELETE #destroy set correct flash notice" do
+          dummy = FactoryGirl.create(:dummy)                        
+          delete :destroy, id: dummy.id
+
+          flash[:notice].should match 'Dummy was successfully destroyed.'
+        end
+
+      end
+
+      context "with invalid data" do
+
+        it "POST #create calls I18n" do
+          dummy_params = FactoryGirl.attributes_for(:dummy_invalid)
+
+          I18n.should_receive(:t)
+                        .with(any_args())
+                        .and_call_original
+
+          post :create, dummy: dummy_params
+        end
+
+        it "PUT/PATCH #update calls I18n" do
+          dummy_name          = 'dummy2'
+          dummy               = FactoryGirl.create(:dummy, name: 'dummy1')
+
+          I18n.should_receive(:t)
+                        .with(any_args())
+                        .and_call_original
+
+          put :update, id: dummy.id, dummy: { name: dummy_name, will_invalidate: true }
+        end
+
+        it "DELETE #destroy calls I18n" do
+          dummy = FactoryGirl.create(:dummy)
+          dummy.stub(:destroy).and_return(false)
+          controller_helpers.stub(:find_by_id_or_friendly_id).with(any_args()).and_return(dummy)
+          
+          I18n.should_receive(:t)
+                        .with(any_args())
+                        .and_call_original
+                        
+          delete :destroy, id: dummy.id
+        end
+
+        it "POST #create set correct flash alert" do
+          dummy_params = FactoryGirl.attributes_for(:dummy_invalid)          
+          post :create, dummy: dummy_params
+
+          flash[:alert].should match 'Dummy cannot be created.'
+        end
+
+        it "PUT/PATCH #update set correct flash alert" do
+          dummy_name          = 'dummy2'
+          dummy               = FactoryGirl.create(:dummy, name: 'dummy1')
+          put :update, id: dummy.id, dummy: { name: dummy_name, will_invalidate: true }
+
+          flash[:alert].should match 'Dummy cannot be updated.'
+        end
+
+        it "DELETE #destroy set correct flash alert" do
+          dummy = FactoryGirl.create(:dummy)        
+          dummy.stub(:destroy).and_return(false)
+          controller_helpers.stub(:find_by_id_or_friendly_id).with(any_args()).and_return(dummy)
+          delete :destroy, id: dummy.id
+
+          flash[:alert].should match 'Dummy cannot be destroyed.'
         end
 
       end

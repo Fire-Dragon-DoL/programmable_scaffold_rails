@@ -18,7 +18,9 @@ module ProgrammableScaffoldRails
             scaffold_helper.formats.each do |used_format|
               case used_format
               when :html
-                format.html { redirect_to scaffold_helper.after_update_url(instance), notice: I18n.t('programmable_scaffold_rails.after_update_notice') }
+                format.html { redirect_to scaffold_helper.after_update_url(instance),
+                                          notice: I18n.t('programmable_scaffold_rails.after_update_notice',
+                                                         model_class: instance.class.model_name.human) }
               when :json
                 format.json { head :no_content }
               end
@@ -28,7 +30,8 @@ module ProgrammableScaffoldRails
               case used_format
               when :html
                 format.html do
-                  flash.alert = I18n.t('programmable_scaffold_rails.after_update_alert')
+                  flash.alert = I18n.t('programmable_scaffold_rails.after_update_alert',
+                                       model_class: instance.class.model_name.human)
                   render action: 'edit'
                 end
               when :json

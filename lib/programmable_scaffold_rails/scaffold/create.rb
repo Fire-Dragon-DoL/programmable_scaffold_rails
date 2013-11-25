@@ -21,7 +21,8 @@ module ProgrammableScaffoldRails
               case used_format
               when :html
                 format.html { redirect_to scaffold_helper.after_create_url(instance),
-                                          notice: I18n.t('programmable_scaffold_rails.after_create_notice') }
+                                          notice: I18n.t('programmable_scaffold_rails.after_create_notice',
+                                                         model_class: instance.class.model_name.human) }
               when :json
                 format.json { render action: 'show', status: :created, location: instance }
               end
@@ -30,7 +31,11 @@ module ProgrammableScaffoldRails
             scaffold_helper.formats.each do |used_format|
               case used_format
               when :html
-                format.html { render action: 'new' }
+                format.html do
+                  flash[:alert] = I18n.t('programmable_scaffold_rails.after_create_alert',
+                                         model_class: instance.class.model_name.human)
+                  render action: 'new'
+                end
               when :json
                 format.json { render json: instance.errors, status: :unprocessable_entity }
               end
