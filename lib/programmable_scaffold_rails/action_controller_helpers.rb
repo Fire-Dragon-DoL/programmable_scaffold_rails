@@ -87,7 +87,18 @@ module ProgrammableScaffoldRails
     end
 
     def after_create_url(obj)
-      controller.url_for(obj)
+      after_url = options[:after_create_url]
+      if after_url.class <= Symbol
+        controller.send(after_url, obj)
+      elsif after_url.class <= Proc
+        controller.instance_exec(obj, &after_url)
+      else
+        if url_namespace.blank?
+          controller.url_for(obj)
+        else
+          controller.url_for([url_namespace, obj])
+        end
+      end
     end
 
     def after_update_url(obj)

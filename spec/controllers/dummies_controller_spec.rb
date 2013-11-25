@@ -129,15 +129,49 @@ describe DummiesController do
   end
 
   context "POST #create" do
+    let(:controller_helpers) { controller_helpers = controller.programmable_scaffold_controller_helpers }
 
     it "calls after_create_url with created object" do
-      controller_helpers = controller.programmable_scaffold_controller_helpers
       dummy_params = FactoryGirl.attributes_for(:dummy)
 
       controller_helpers.should_receive(:after_create_url)
                         .with(kind_of(ActiveRecord::Base))
                         .and_call_original
       post :create, dummy: dummy_params
+    end
+
+    context "after_create_url" do
+      let(:dummy) { FactoryGirl.create(:dummy) }
+
+      it "returns an url with namespace when is set" do
+        controller_helpers.stub(:url_namespace).and_return('admin')
+
+        controller_helpers.after_create_url(dummy).should match "/admin/dummies/#{ dummy.id }"
+      end
+
+      it "returns an url without namespace when is not set" do
+        controller_helpers.after_create_url(dummy).should match "/dummies/#{ dummy.id }"
+      end
+
+      its "called with a symbol and runs a method on the controller with after_create_url name" do
+        old_options                    = controller_helpers.send(:options).dup
+        old_options[:after_create_url] = :dummy_after_create_url
+        controller_helpers.stub(:options).and_return(old_options.freeze)
+        controller.stub(:dummy_after_create_url).with(anything()).and_return(controller.dummies_url)
+
+        controller_helpers.after_create_url(dummy).should match controller.dummies_url
+      end
+
+      its "called with a proc and runs it" do
+        old_options                    = controller_helpers.send(:options).dup
+        # XXX: Notice that in this case self is == to controller because code is
+        #      instance_exec-uted
+        old_options[:after_create_url] = ->(obj) { self.dummies_url }
+        controller_helpers.stub(:options).and_return(old_options.freeze)
+
+        controller_helpers.after_create_url(dummy).should match controller.dummies_url
+      end
+
     end
 
     # TODO: Test for after_create_url when customized by the user and when not
