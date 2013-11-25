@@ -274,6 +274,34 @@ describe DummiesController do
       end
     end
 
+    context "I18n flash message" do
+      before(:each) do
+        I18n.locale = :en
+      end
+
+      context "with valid data" do
+
+        it "POST #create calls I18n", focus: true do
+          dummy_params = FactoryGirl.attributes_for(:dummy)
+
+          I18n.should_receive(:translate)
+                        .with(any_arguments())
+                        .and_call_original
+
+          post :create, dummy: dummy_params
+        end
+
+        it "POST #create set correct flash notice" do
+          dummy_params = FactoryGirl.attributes_for(:dummy)          
+          post :create, dummy: dummy_params
+
+          flash[:notice].should match 'was successfully created.'
+        end
+
+      end
+
+    end
+
 
   end
 

@@ -21,7 +21,7 @@ module ProgrammableScaffoldRails
               case used_format
               when :html
                 format.html { redirect_to scaffold_helper.after_create_url(instance),
-                                          notice: 'User was successfully created.' }
+                                          notice: I18n.t('programmable_scaffold_rails.after_create_notice') }
               when :json
                 format.json { render action: 'show', status: :created, location: instance }
               end
