@@ -96,7 +96,7 @@ You can change these keys in your locales to have your application easily locali
 #### Regarding model_class
 
 Model class is auto-calculated with  `model_instance.class.model_name.human`, if you localize your model
-class following rails standards, you shouldn't have any problem.
+class following Rails standards, you shouldn't have any problem.
 
 ## Features
 
