@@ -1,0 +1,8 @@
+en:
+  programmable_scaffold_rails:
+    after_create_notice:  "%{ model_class } was successfully created"
+    after_update_notice:  "%{ model_class } was successfully updated"
+    after_destroy_notice: "%{ model_class } was successfully destroyed"
+    after_create_alert:   "%{ model_class } cannot be created"
+    after_update_alert:   "%{ model_class } cannot be updated"
+    after_destroy_alert:  "%{ model_class } cannot be destroyed"
