@@ -105,6 +105,7 @@ class following Rails standards, you shouldn't have any problem.
 
 # TODO
 
+- Improve readme by explaining what each "scaffold" action does
 - Add I18n keys to completely replace those with `model_class`, if for example someone want to insert custom messages for each controller, something like `programmable_scaffold_rails.<controller_name>.after_create_notice`
 
 ## Contributing
