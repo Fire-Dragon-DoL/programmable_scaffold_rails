@@ -47,7 +47,7 @@ used internally for specs.
 | cancan | bool | true | Enable cancan support which calls authorize! before each CRUD action |
 | friendly\_id | bool | false | Enable `friendly_id` support, if your model uses `friendly_id`, that will be used for finding the model object |
 | strong\_params | Symbol | :model_params | Name of existing method in controller, which should return params hash filtered by strong_parameters |
-| url_\namespace | String | Empty string | When generating urls for `after_create_url`, `after_update_url` and `after_destroy_url`, a namespace will be prepended if this is set |
+| url\_namespace | String | Empty string | When generating urls for `after_create_url`, `after_update_url` and `after_destroy_url`, a namespace will be prepended if this is set |
 | after\_create\_action | Nil, Symbol | :show | One of `nil`, `:show`, `:edit`. `nil` and `:show` are the same |
 | after\_update\_action | Nil, Symbol | :show | See `after_create_action` |
 | after\_create\_url | Nil, Symbol, Proc, String | nil | If `nil` is set, the url will be auto generated with `url_namespace` and using the `after_create_action` for the given model object. If `Symbol` is used, a method with that name will be searched in controller and called with model instance as argument, it must generate a valid url. If proc is used, it will be called with model instance as argument. If a `String` is used, it will be directly passed to `url_for` to generate an url |
