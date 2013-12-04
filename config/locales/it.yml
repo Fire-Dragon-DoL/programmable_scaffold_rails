@@ -1,0 +1,8 @@
+it:
+  programmable_scaffold_rails:
+    after_create_notice:  "%{model_class} è stato creato correttamente."
+    after_update_notice:  "%{model_class} è stato modificato correttamente."
+    after_destroy_notice: "%{model_class} è stato eliminato correttamente."
+    after_create_alert:   "%{model_class} non può essere creato."
+    after_update_alert:   "%{model_class} non può essere modificato."
+    after_destroy_alert:  "%{model_class} non può essere eliminato."

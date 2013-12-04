@@ -8,7 +8,7 @@ It's also configurable, to avoid as most as possible to completely override one 
 
 Add this line to your application's Gemfile:
 
-    gem 'programmable_scaffold_rails', '~> 0.0.2'
+    gem 'programmable_scaffold_rails', '~> 0.0.3'
 
 And then execute:
 
